@@ -2,8 +2,8 @@ window.addEventListener("load", function() {
 
    // validation to ensure user submits a value for each textbox along with correct value type
    let form = document.querySelector("form");
+
    form.addEventListener("submit", function(event) {
-      
       const pilotName = document.querySelector("input[name=pilotName]");
       const copilotName = document.querySelector("input[name=copilotName]");
       const fuelLevel = document.querySelector("input[name=fuelLevel]");
@@ -15,52 +15,63 @@ window.addEventListener("load", function() {
       let copilotStatus = document.getElementById("copilotStatus");
       let cargoStatus = document.getElementById("cargoStatus");
       
+      // checks if there are values inputed into the text box
       if (!(pilotName.value) || !(copilotName.value) || !(fuelLevel.value) || !(cargoMass.value)) {
-         if (isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
+         // checks for if names contains numbers and if fuel levels / cargo mass contains letters
+         if (!(isNaN(pilotName.value)) || !(copilotName.value)) {
+            alert("Please enter a string value for Pilot/Copilot Names.");
+            event.preventDefault();
+         } else if (isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
             alert("Please enter a number value for Fuel Level/Cargo Mass.");
             event.preventDefault();
          } else {
             alert("All fields are required.");
+            event.preventDefault();
          }
-         event.preventDefault();
       } else {
          faultyItems.style.visibility = "visible";
       }
       
+      // conditions set to change the values of launchStatus/fuelStatus/cargoStatus
       if (fuelLevel.value < 10000 && cargoMass.value > 10000) {
-         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
-         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
-         faultyItems.style.visibility = "visible";
          launchStatus.style.color = "red";
          launchStatus.innerHTML = "Shuttle not ready for launch.";
          fuelStatus.innerHTML = "There is not enough fuel for the journey.";
          cargoStatus.innerHTML = "There is too much mass for the shuttle to takeoff.";
+         event.preventDefault();
       } else if (fuelLevel.value < 10000) {
-         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
-         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
-         faultyItems.style.visibility = "visible";
          launchStatus.style.color = "red";
          launchStatus.innerHTML = "Shuttle not ready for launch.";
          fuelStatus.innerHTML = "There is not enough fuel for the journey.";
+         if (cargoMass.value <= 10000) {
+            cargoStatus.innerHTML = "Cargo mass low enough for launch.";
+         }
          event.preventDefault();
       } else if (cargoMass.value > 10000) {
-         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
-         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
-         faultyItems.style.visibility = "visible";
          launchStatus.style.color = "red";
          launchStatus.innerHTML = "Shuttle not ready for launch.";
          cargoStatus.innerHTML = "There is too much mass for the shuttle to takeoff.";
+         if (fuelLevel.value >= 10000) {
+            fuelStatus.innerHTML = "Fuel level high enough for launch.";
+         }
          event.preventDefault();
       } else {
-         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
-         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
-         faultyItems.style.visibility = "visible";
          launchStatus.style.color = "green";
-         launchStatus.innerHTML = "Shuttle is ready for launch."
+         launchStatus.innerHTML = "Shuttle is ready for launch.";
+         fuelStatus.innerHTML = "Fuel level high enough for launch.";
+         cargoStatus.innerHTML = "Cargo mass low enough for launch.";
          event.preventDefault();
       }
 
+      // sets faultyItem div to be visible after initial submit
+      faultyItems.style.visibility = "visible";
+
+      // correctly capitalizes the co/pilot's names
+      pilotStatus.innerHTML = `Pilot ${pilotName.value.toLowerCase().charAt(0).toUpperCase() + pilotName.value.toLowerCase().slice(1)} is ready.`;
+      copilotStatus.innerHTML = `Copilot ${copilotName.value.toLowerCase().charAt(0).toUpperCase() + copilotName.value.toLowerCase().slice(1)} is ready.`;
    });
+
+   // fetches the planets api
    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
       response.json().then(function(json) {
          let missionTarget = document.getElementById("missionTarget");
@@ -76,6 +87,6 @@ window.addEventListener("load", function() {
             </ol>
             <img src="${json[random].image}">
          `
-      })
-   })
+      });
+   });
 });
