@@ -1,6 +1,4 @@
 window.addEventListener("load", function() {
-
-   // validation to ensure user submits a value for each textbox along with correct value type
    let form = document.querySelector("form");
 
    form.addEventListener("submit", function(event) {
@@ -15,22 +13,30 @@ window.addEventListener("load", function() {
       let copilotStatus = document.getElementById("copilotStatus");
       let cargoStatus = document.getElementById("cargoStatus");
       
+      // sets faultyItem div to be visible after initial submit
+      faultyItems.style.visibility = "visible";
+
       // checks if there are values inputed into the text box
       if (!(pilotName.value) || !(copilotName.value) || !(fuelLevel.value) || !(cargoMass.value)) {
-         // checks for if names contains numbers and if fuel levels / cargo mass contains letters
-         if (!(isNaN(pilotName.value)) || !(copilotName.value)) {
-            alert("Please enter a string value for Pilot/Copilot Names.");
+         alert("All fields are required.");
             event.preventDefault();
-         } else if (isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
-            alert("Please enter a number value for Fuel Level/Cargo Mass.");
-            event.preventDefault();
-         } else {
-            alert("All fields are required.");
-            event.preventDefault();
-         }
-      } else {
-         faultyItems.style.visibility = "visible";
       }
+
+      // checks if names are strings
+      if (!(isNaN(pilotName.value)) || !(isNaN(copilotName.value))) {
+         alert("Please enter a string value for Pilot/Copilot Names.");
+         event.preventDefault();
+      } else {
+         // correctly capitalizes the co/pilot's names
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.toLowerCase().charAt(0).toUpperCase() + pilotName.value.toLowerCase().slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.toLowerCase().charAt(0).toUpperCase() + copilotName.value.toLowerCase().slice(1)} is ready.`;
+      }
+
+      // checks if the values are numbers
+      if (isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
+         alert("Please enter a number value for Fuel Level/Cargo Mass.");
+         event.preventDefault();
+      } 
       
       // conditions set to change the values of launchStatus/fuelStatus/cargoStatus
       if (fuelLevel.value < 10000 && cargoMass.value > 10000) {
@@ -62,13 +68,6 @@ window.addEventListener("load", function() {
          cargoStatus.innerHTML = "Cargo mass low enough for launch.";
          event.preventDefault();
       }
-
-      // sets faultyItem div to be visible after initial submit
-      faultyItems.style.visibility = "visible";
-
-      // correctly capitalizes the co/pilot's names
-      pilotStatus.innerHTML = `Pilot ${pilotName.value.toLowerCase().charAt(0).toUpperCase() + pilotName.value.toLowerCase().slice(1)} is ready.`;
-      copilotStatus.innerHTML = `Copilot ${copilotName.value.toLowerCase().charAt(0).toUpperCase() + copilotName.value.toLowerCase().slice(1)} is ready.`;
    });
 
    // fetches the planets api
@@ -86,7 +85,7 @@ window.addEventListener("load", function() {
                <li>Number of Moons: ${json[random].moons}</li>
             </ol>
             <img src="${json[random].image}">
-         `
+         `;
       });
    });
 });
