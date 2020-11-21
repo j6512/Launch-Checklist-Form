@@ -1,29 +1,63 @@
-// Write your JavaScript code here!
 window.addEventListener("load", function() {
 
    // validation to ensure user submits a value for each textbox along with correct value type
    let form = document.querySelector("form");
    form.addEventListener("submit", function(event) {
-      let pilotName = document.getElementById("pilotName");
-      let copilotName = document.getElementById("copilotName");
-      let fuelLevel = document.getElementById("fuelLevel");
-      let cargoMass = document.getElementById("cargoMass");
       
-      if (pilotName.value === "" || copilotName.value === "" || isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
-         alert("All fields are required.");
+      const pilotName = document.querySelector("input[name=pilotName]");
+      const copilotName = document.querySelector("input[name=copilotName]");
+      const fuelLevel = document.querySelector("input[name=fuelLevel]");
+      const cargoMass = document.querySelector("input[name=cargoMass]");
+      let faultyItems = document.getElementById("faultyItems");
+      let launchStatus = document.getElementById("launchStatus");
+      let fuelStatus = document.getElementById("fuelStatus");
+      let pilotStatus = document.getElementById("pilotStatus");
+      let copilotStatus = document.getElementById("copilotStatus");
+      let cargoStatus = document.getElementById("cargoStatus");
+      
+      if (!(pilotName.value) || !(copilotName.value) || !(fuelLevel.value) || !(cargoMass.value)) {
+         if (isNaN(fuelLevel.value) || isNaN(cargoMass.value)) {
+            alert("Please enter a number value for Fuel Level/Cargo Mass.");
+            event.preventDefault();
+         } else {
+            alert("All fields are required.");
+         }
+         event.preventDefault();
+      } else {
+         faultyItems.style.visibility = "visible";
+      }
+      
+      if (fuelLevel.value < 10000 && cargoMass.value > 10000) {
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
+         faultyItems.style.visibility = "visible";
+         launchStatus.style.color = "red";
+         launchStatus.innerHTML = "Shuttle not ready for launch.";
+         fuelStatus.innerHTML = "There is not enough fuel for the journey.";
+         cargoStatus.innerHTML = "There is too much mass for the shuttle to takeoff.";
+      } else if (fuelLevel.value < 10000) {
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
+         faultyItems.style.visibility = "visible";
+         launchStatus.style.color = "red";
+         launchStatus.innerHTML = "Shuttle not ready for launch.";
+         fuelStatus.innerHTML = "There is not enough fuel for the journey.";
+         event.preventDefault();
+      } else if (cargoMass.value > 10000) {
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
+         faultyItems.style.visibility = "visible";
+         launchStatus.style.color = "red";
+         launchStatus.innerHTML = "Shuttle not ready for launch.";
+         cargoStatus.innerHTML = "There is too much mass for the shuttle to takeoff.";
+         event.preventDefault();
+      } else {
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.slice(1)} is ready.`;
+         faultyItems.style.visibility = "visible";
+         launchStatus.style.color = "green";
+         launchStatus.innerHTML = "Shuttle is ready for launch."
          event.preventDefault();
       }
    });
 });
-
-/* This block of code shows how to format the HTML once you fetch some planetary JSON!
-<h2>Mission Destination</h2>
-<ol>
-   <li>Name: ${}</li>
-   <li>Diameter: ${}</li>
-   <li>Star: ${}</li>
-   <li>Distance from Earth: ${}</li>
-   <li>Number of Moons: ${}</li>
-</ol>
-<img src="${}">
-*/
