@@ -28,8 +28,8 @@ window.addEventListener("load", function() {
          event.preventDefault();
       } else {
          // correctly capitalizes the co/pilot's names
-         pilotStatus.innerHTML = `Pilot ${pilotName.value.toLowerCase().charAt(0).toUpperCase() + pilotName.value.toLowerCase().slice(1)} is ready.`;
-         copilotStatus.innerHTML = `Copilot ${copilotName.value.toLowerCase().charAt(0).toUpperCase() + copilotName.value.toLowerCase().slice(1)} is ready.`;
+         pilotStatus.innerHTML = `Pilot ${pilotName.value.charAt(0).toUpperCase() + pilotName.value.toLowerCase().slice(1)} is ready.`;
+         copilotStatus.innerHTML = `Copilot ${copilotName.value.charAt(0).toUpperCase() + copilotName.value.toLowerCase().slice(1)} is ready.`;
       }
 
       // checks if the values are numbers
