@@ -59,5 +59,23 @@ window.addEventListener("load", function() {
          launchStatus.innerHTML = "Shuttle is ready for launch."
          event.preventDefault();
       }
+
    });
+   fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+      response.json().then(function(json) {
+         let missionTarget = document.getElementById("missionTarget");
+         let random = Math.floor(Math.random() * 6);
+         missionTarget.innerHTML = `
+            <h2>Mission Destination</h2>
+            <ol>
+               <li>Name: ${json[random].name}</li>
+               <li>Diameter: ${json[random].diameter}</li>
+               <li>Star: ${json[random].star}</li>
+               <li>Distance from Earth: ${json[random].distance}</li>
+               <li>Number of Moons: ${json[random].moons}</li>
+            </ol>
+            <img src="${json[random].image}">
+         `
+      })
+   })
 });
